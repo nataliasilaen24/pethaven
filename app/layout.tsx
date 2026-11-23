@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Header from "./components/Header";
 
 export const metadata: Metadata = {
-  title: "PetHaven | Everything Your Pet Needs",
+  title: "PetHaven | Pet Shop",
   description:
-    "PetHaven menyediakan berbagai kebutuhan hewan peliharaan, mulai dari makanan, mainan, hingga perlengkapan perawatan.",
+    "Temukan makanan, mainan, dan perlengkapan terbaik untuk hewan kesayanganmu.",
 };
 
 export default function RootLayout({
@@ -24,11 +14,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="id"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="id">
+      <body>
+        <Header />
         {children}
       </body>
     </html>

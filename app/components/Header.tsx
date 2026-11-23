@@ -18,7 +18,11 @@ export default function Header() {
 
   return (
     <header className="navbar">
-      <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
+      <Link
+        href="/"
+        className="logo"
+        onClick={() => setMenuOpen(false)}
+      >
         <span className="logo-icon">🐾</span>
         Pet<span>Haven</span>
       </Link>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo, useState } from "react";
@@ -80,32 +81,6 @@ export default function Home() {
 
   return (
     <main>
-      {/* NAVBAR */}
-      <header className="navbar">
-        <a href="#home" className="logo">
-          <span className="logo-icon">🐾</span>
-          Pet<span>Haven</span>
-        </a>
-
-        <nav className="nav-links">
-          <a href="#home" className="active">Home</a>
-          <a href="#categories">Categories</a>
-          <a href="#products">Products</a>
-          <a href="#about">About Us</a>
-          <a href="#contact">Contact</a>
-        </nav>
-
-        <div className="nav-actions">
-          <button
-            className="cart-button"
-            onClick={() => alert(`Keranjang berisi ${cart} produk.`)}
-          >
-            🛒 <span>Cart ({cart})</span>
-          </button>
-          <a href="#products" className="nav-shop">Shop Now</a>
-        </div>
-      </header>
-
       {/* HERO */}
       <section className="hero" id="home">
         <div className="hero-content">
@@ -128,6 +103,7 @@ export default function Home() {
             <a href="#products" className="primary-button">
               Explore Products <span>→</span>
             </a>
+
             <a href="#about" className="secondary-button">
               Discover More
             </a>
@@ -138,10 +114,12 @@ export default function Home() {
               <strong>100+</strong>
               <span>Pet Products</span>
             </div>
+
             <div>
               <strong>Happy Pets</strong>
               <span>Our Main Priority</span>
             </div>
+
             <div>
               <strong>100%</strong>
               <span>Love & Care</span>
@@ -154,6 +132,7 @@ export default function Home() {
             src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=1100"
             alt="Anjing dan hewan peliharaan"
           />
+
           <div className="floating-card">
             <span className="floating-icon">💚</span>
             <div>
@@ -161,6 +140,7 @@ export default function Home() {
               <small>For your lovely pets</small>
             </div>
           </div>
+
           <div className="hero-decoration">✦</div>
         </div>
       </section>
@@ -241,6 +221,9 @@ export default function Home() {
             <span className="eyebrow">OUR FAVORITE COLLECTION</span>
             <h2>Products for Happy Pets</h2>
             <p>Produk pilihan untuk sahabat berbulu kesayanganmu.</p>
+            <p className="cart-summary">
+              🛒 Keranjang: {cart} produk
+            </p>
           </div>
 
           <input
@@ -266,6 +249,7 @@ export default function Home() {
                   <span className="product-category">
                     {product.category}
                   </span>
+
                   <span className="product-rating">
                     ★ {product.rating}
                   </span>
@@ -275,10 +259,13 @@ export default function Home() {
 
                 <div className="product-bottom">
                   <strong>{formatPrice(product.price)}</strong>
+
                   <button
                     className="add-button"
                     aria-label={`Tambah ${product.name} ke keranjang`}
-                    onClick={() => setCart((current) => current + 1)}
+                    onClick={() =>
+                      setCart((current) => current + 1)
+                    }
                   >
                     +
                   </button>
@@ -293,6 +280,7 @@ export default function Home() {
             <span>🐾</span>
             <h3>Produk tidak ditemukan</h3>
             <p>Coba gunakan kata kunci atau kategori lainnya.</p>
+
             <button
               className="secondary-button"
               onClick={() => {
@@ -315,10 +303,12 @@ export default function Home() {
             Berikan perhatian terbaik melalui produk yang tepat
             untuk sahabat kesayanganmu.
           </p>
+
           <a href="#products" className="promo-button">
             Shop Collection →
           </a>
         </div>
+
         <div className="promo-emoji">🐕 🐈</div>
       </section>
 
@@ -334,6 +324,7 @@ export default function Home() {
         <div className="about-content">
           <span className="eyebrow">A LITTLE ABOUT US</span>
           <h2>More Than Products, It's About Love.</h2>
+
           <p>
             PetHaven hadir sebagai tempat untuk menemukan
             berbagai kebutuhan hewan peliharaan. Kami percaya
@@ -357,10 +348,12 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <span className="eyebrow">LET'S TALK ABOUT YOUR PET</span>
         <h2>We're Here for You and Your Pets.</h2>
+
         <p>
           Punya pertanyaan mengenai produk kami?
           Jangan ragu untuk menghubungi PetHaven.
         </p>
+
         <a href="mailto:hello@pethaven.com" className="primary-button">
           Contact Us →
         </a>
@@ -373,7 +366,10 @@ export default function Home() {
             <span className="logo-icon">🐾</span>
             Pet<span>Haven</span>
           </a>
-          <p>Making every pet's life happier, healthier, and full of love.</p>
+
+          <p>
+            Making every pet's life happier, healthier, and full of love.
+          </p>
         </div>
 
         <div className="footer-links">
