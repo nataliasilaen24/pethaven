@@ -1083,3 +1083,94 @@ button {
     padding: 40px 6%;
   }
 }
+/* =================================
+   PET HAVEN CATEGORY SECTION
+================================= */
+
+.pet-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 35px;
+}
+
+.pet-category-card {
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pet-category-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.pet-category-image {
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  background: #f5f5f0;
+}
+
+.pet-category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.pet-category-card:hover .pet-category-image img {
+  transform: scale(1.07);
+}
+
+.pet-category-info {
+  padding: 17px 12px;
+  text-align: center;
+}
+
+.pet-category-info h3 {
+  color: #263b32;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.pet-category-info span {
+  color: #6a967c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+  .pet-category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .pet-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .pet-category-image {
+    height: 145px;
+  }
+
+  .pet-category-info {
+    padding: 13px 8px;
+  }
+
+  .pet-category-info h3 {
+    font-size: 14px;
+  }
+
+  .pet-category-info span {
+    font-size: 12px;
+  }
+}

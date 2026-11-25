@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo, useState } from "react";
@@ -46,12 +45,30 @@ const products = [
   },
 ];
 
+// DATA 22 KATEGORI HEWAN
 const categories = [
-  { name: "Semua", icon: "🐾", description: "Semua kebutuhan" },
-  { name: "Kucing", icon: "🐱", description: "Untuk kucing" },
-  { name: "Anjing", icon: "🐶", description: "Untuk anjing" },
-  { name: "Mainan", icon: "🎾", description: "Mainan hewan" },
-  { name: "Perawatan", icon: "🧴", description: "Perawatan hewan" },
+  { name: "Kucing Anggora Persia", image: "/images/categories/kucing-anggora.jpg" },
+  { name: "Anjing", image: "/images/categories/anjing.jpg" },
+  { name: "Burung Kakak Tua", image: "/images/categories/burung-kakatua.jpg" },
+  { name: "Burung Lovebird", image: "/images/categories/burung-lovebird.jpg" },
+  { name: "Gerbil", image: "/images/categories/gerbil.jpg" },
+  { name: "Guinea Pig atau Tikus Belanda", image: "/images/categories/guinea-pig.jpg" },
+  { name: "Hamster Dwarf", image: "/images/categories/hamster-dwarf.jpg" },
+  { name: "Hamster", image: "/images/categories/hamster.jpg" },
+  { name: "Ikan Cupang", image: "/images/categories/ikan-cupang.jpg" },
+  { name: "Ikan Mas", image: "/images/categories/ikan-mas.jpg" },
+  { name: "Ikan Neon Tetra", image: "/images/categories/ikan-neon-tetra.jpg" },
+  { name: "Kelinci New Zealand", image: "/images/categories/kelinci-new-zealand.jpg" },
+  { name: "Kelinci", image: "/images/categories/kelinci.jpg" },
+  { name: "Kitten Kucing Persia", image: "/images/categories/kitten-persia.jpg" },
+  { name: "Kucing Kampung", image: "/images/categories/kucing-kampung.jpg" },
+  { name: "Kucing Persia", image: "/images/categories/kucing-persia.jpg" },
+  { name: "Kura-kura Telinga Merah", image: "/images/categories/kura-telinga-merah.jpg" },
+  { name: "Kura-kura", image: "/images/categories/kura-kura.jpg" },
+  { name: "Landak Mini", image: "/images/categories/landak-mini.jpg" },
+  { name: "Love Bird", image: "/images/categories/lovebird.jpg" },
+  { name: "Marmut", image: "/images/categories/marmut.jpg" },
+  { name: "Sugar Glider", image: "/images/categories/sugar-glider.jpg" },
 ];
 
 export default function Home() {
@@ -184,32 +201,38 @@ export default function Home() {
       <section className="section categories-section" id="categories">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">FIND WHAT YOUR PET NEEDS</span>
+            <span className="eyebrow">
+              DISCOVER YOUR LOVELY PETS
+            </span>
+
             <h2>Explore Our Categories</h2>
+
             <p>
-              Pilih kategori produk sesuai kebutuhan hewan kesayanganmu.
+              Temukan berbagai jenis hewan peliharaan
+              yang bisa menjadi sahabat terbaikmu.
             </p>
           </div>
         </div>
 
-        <div className="category-list">
+        <div className="pet-category-grid">
           {categories.map((item) => (
-            <button
+            <article
+              className="pet-category-card"
               key={item.name}
-              className={`category-card ${
-                category === item.name ? "selected" : ""
-              }`}
-              onClick={() => {
-                setCategory(item.name);
-                document
-                  .getElementById("products")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
             >
-              <span className="category-icon">{item.icon}</span>
-              <strong>{item.name}</strong>
-              <small>{item.description}</small>
-            </button>
+              <div className="pet-category-image">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  loading="lazy"
+                />
+              </div>
+
+              <div className="pet-category-info">
+                <h3>{item.name}</h3>
+                <span>Explore Pet →</span>
+              </div>
+            </article>
           ))}
         </div>
       </section>
@@ -218,9 +241,16 @@ export default function Home() {
       <section className="section products-section" id="products">
         <div className="section-heading product-heading">
           <div>
-            <span className="eyebrow">OUR FAVORITE COLLECTION</span>
+            <span className="eyebrow">
+              OUR FAVORITE COLLECTION
+            </span>
+
             <h2>Products for Happy Pets</h2>
-            <p>Produk pilihan untuk sahabat berbulu kesayanganmu.</p>
+
+            <p>
+              Produk pilihan untuk sahabat berbulu kesayanganmu.
+            </p>
+
             <p className="cart-summary">
               🛒 Keranjang: {cart} produk
             </p>
@@ -241,7 +271,9 @@ export default function Home() {
             <article className="product-card" key={product.id}>
               <div className="product-image">
                 <img src={product.image} alt={product.name} />
-                <span className="product-tag">{product.tag}</span>
+                <span className="product-tag">
+                  {product.tag}
+                </span>
               </div>
 
               <div className="product-info">
@@ -279,7 +311,9 @@ export default function Home() {
           <div className="empty-message">
             <span>🐾</span>
             <h3>Produk tidak ditemukan</h3>
-            <p>Coba gunakan kata kunci atau kategori lainnya.</p>
+            <p>
+              Coba gunakan kata kunci atau kategori lainnya.
+            </p>
 
             <button
               className="secondary-button"
@@ -297,8 +331,12 @@ export default function Home() {
       {/* PROMO BANNER */}
       <section className="promo-section">
         <div>
-          <span className="eyebrow">A LITTLE TREAT FOR YOUR PET</span>
+          <span className="eyebrow">
+            A LITTLE TREAT FOR YOUR PET
+          </span>
+
           <h2>Happiness Starts with a Healthy Pet.</h2>
+
           <p>
             Berikan perhatian terbaik melalui produk yang tepat
             untuk sahabat kesayanganmu.
@@ -323,6 +361,7 @@ export default function Home() {
 
         <div className="about-content">
           <span className="eyebrow">A LITTLE ABOUT US</span>
+
           <h2>More Than Products, It's About Love.</h2>
 
           <p>
@@ -346,7 +385,10 @@ export default function Home() {
 
       {/* CONTACT */}
       <section className="contact-section" id="contact">
-        <span className="eyebrow">LET'S TALK ABOUT YOUR PET</span>
+        <span className="eyebrow">
+          LET'S TALK ABOUT YOUR PET
+        </span>
+
         <h2>We're Here for You and Your Pets.</h2>
 
         <p>
