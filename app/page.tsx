@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { petCategories } from "./pet-categories";
 
 const products = [
   {
@@ -46,31 +47,6 @@ const products = [
 ];
 
 // DATA 22 KATEGORI HEWAN
-const categories = [
-  { name: "Kucing Anggora Persia", image: "/images/categories/kucing-anggora.jpg" },
-  { name: "Anjing", image: "/images/categories/anjing.jpg" },
-  { name: "Burung Kakak Tua", image: "/images/categories/burung-kakatua.jpg" },
-  { name: "Burung Lovebird", image: "/images/categories/burung-lovebird.jpg" },
-  { name: "Gerbil", image: "/images/categories/gerbil.jpg" },
-  { name: "Guinea Pig atau Tikus Belanda", image: "/images/categories/guinea-pig.jpg" },
-  { name: "Hamster Dwarf", image: "/images/categories/hamster-dwarf.jpg" },
-  { name: "Hamster", image: "/images/categories/hamster.jpg" },
-  { name: "Ikan Cupang", image: "/images/categories/ikan-cupang.jpg" },
-  { name: "Ikan Mas", image: "/images/categories/ikan-mas.jpg" },
-  { name: "Ikan Neon Tetra", image: "/images/categories/ikan-neon-tetra.jpg" },
-  { name: "Kelinci New Zealand", image: "/images/categories/kelinci-new-zealand.jpg" },
-  { name: "Kelinci", image: "/images/categories/kelinci.jpg" },
-  { name: "Kitten Kucing Persia", image: "/images/categories/kitten-persia.jpg" },
-  { name: "Kucing Kampung", image: "/images/categories/kucing-kampung.jpg" },
-  { name: "Kucing Persia", image: "/images/categories/kucing-persia.jpg" },
-  { name: "Kura-kura Telinga Merah", image: "/images/categories/kura-telinga-merah.jpg" },
-  { name: "Kura-kura", image: "/images/categories/kura-kura.jpg" },
-  { name: "Landak Mini", image: "/images/categories/landak-mini.jpg" },
-  { name: "Love Bird", image: "/images/categories/lovebird.jpg" },
-  { name: "Marmut", image: "/images/categories/marmut.jpg" },
-  { name: "Sugar Glider", image: "/images/categories/sugar-glider.jpg" },
-];
-
 export default function Home() {
   const [category, setCategory] = useState("Semua");
   const [search, setSearch] = useState("");
@@ -215,7 +191,7 @@ export default function Home() {
         </div>
 
         <div className="pet-category-grid">
-          {categories.map((item) => (
+          {petCategories.map((item) => (
             <article
               className="pet-category-card"
               key={item.name}

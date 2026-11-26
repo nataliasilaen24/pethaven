@@ -957,6 +957,14 @@ button {
   padding: 55px 9%;
 }
 
+.catalog-group + .catalog-group {
+  margin-top: 36px;
+}
+
+.catalog-group h2 {
+  margin-bottom: 16px;
+}
+
 .catalog-controls {
   display: flex;
   gap: 15px;

@@ -1,11 +1,5 @@
-import Link from "next/link";
-
-const categories = [
-  { name: "Kucing", icon: "🐱", description: "Makanan dan kebutuhan kucing." },
-  { name: "Anjing", icon: "🐶", description: "Berbagai kebutuhan anjing." },
-  { name: "Mainan", icon: "🎾", description: "Mainan agar hewan lebih aktif." },
-  { name: "Perawatan", icon: "🧴", description: "Produk untuk menjaga kebersihan." },
-];
+import Image from "next/image";
+import { petCategories } from "../pet-categories";
 
 export default function CategoriesPage() {
   return (
@@ -16,19 +10,19 @@ export default function CategoriesPage() {
         <p>Pilih kategori sesuai kebutuhan hewan kesayanganmu.</p>
       </section>
 
-      <section className="inner-grid">
-        {categories.map((item) => (
-          <Link
-            href={`/products?category=${encodeURIComponent(item.name)}`}
-            className="inner-card"
-            key={item.name}
-          >
-            <span>{item.icon}</span>
-            <h2>{item.name}</h2>
-            <p>{item.description}</p>
-            <strong>Explore Products →</strong>
-          </Link>
-        ))}
+      <section className="section categories-section" aria-label="Kategori hewan">
+        <div className="pet-category-grid">
+          {petCategories.map((pet) => (
+            <article className="pet-category-card" key={pet.name}>
+              <div className="pet-category-image">
+                <Image src={pet.image} alt="" width={400} height={190} />
+              </div>
+              <div className="pet-category-info">
+                <h3>{pet.name}</h3>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   );
