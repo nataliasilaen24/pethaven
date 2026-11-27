@@ -1,0 +1,98 @@
+.pet-gallery {
+  width: min(94%, 1360px);
+  margin: 0 auto;
+  padding: 28px 0 64px;
+}
+
+.pet-gallery-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+.pet-gallery-toolbar button,
+.pet-gallery-actions > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #24342d;
+  border: 1px solid #dfe8e3;
+  border-radius: 999px;
+}
+
+.pet-gallery-toolbar button {
+  gap: 8px;
+  padding: 8px 14px;
+}
+
+.pet-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 48px clamp(12px, 2.4vw, 34px);
+}
+
+.pet-gallery-card {
+  text-align: center;
+}
+
+.pet-gallery-photo {
+  position: relative;
+  aspect-ratio: 1 / 1.03;
+  overflow: hidden;
+  background: #15231e;
+}
+
+.pet-gallery-photo img {
+  object-fit: cover;
+}
+
+.pet-gallery-actions {
+  position: absolute;
+  inset: auto 0 clamp(9px, 1.7vw, 23px);
+  display: flex;
+  justify-content: center;
+  gap: clamp(4px, 0.8vw, 10px);
+}
+
+.pet-gallery-actions > * {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.pet-gallery-actions > *:hover {
+  background: #e5eee5;
+}
+
+.pet-gallery button[aria-pressed="true"] {
+  background: #fbe7ec;
+  color: #9b2648;
+}
+
+.pet-gallery-card h2 {
+  margin: 14px 0 0;
+  color: #147c77;
+  font-size: clamp(15px, 1.5vw, 20px);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1000px) {
+  .pet-gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .pet-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
+  }
+
+  .pet-gallery-actions > * {
+    width: 38px;
+    height: 38px;
+  }
+}

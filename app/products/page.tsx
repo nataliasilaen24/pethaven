@@ -44,6 +44,9 @@ function ProductCatalog() {
       <section className="catalog-section">
         <div className="catalog-controls">
           <input
+            id="cari-produk"
+            type="search"
+            aria-label="Cari nama produk"
             className="search-input"
             placeholder="Cari nama produk..."
             value={search}

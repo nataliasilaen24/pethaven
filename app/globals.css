@@ -72,8 +72,10 @@ button {
   color: #8aa58a;
 }
 
-.logo-icon {
-  font-size: 27px;
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  flex: none;
 }
 
 .nav-links {
@@ -108,7 +110,7 @@ button {
   font-size: 13px;
 }
 
-.nav-shop,
+.nav-search,
 .primary-button {
   background: var(--green);
   color: white;
@@ -123,10 +125,27 @@ button {
   transition: 0.25s;
 }
 
-.nav-shop:hover,
+.nav-search:hover,
 .primary-button:hover {
   background: var(--green-dark);
   transform: translateY(-2px);
+}
+
+.nav-search {
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.nav-search svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+#cari-produk {
+  scroll-margin-top: 110px;
 }
 
 /* HERO */
@@ -735,6 +754,11 @@ button {
     font-size: 22px;
   }
 
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
   .nav-links {
     order: 3;
     width: 100%;
@@ -749,10 +773,12 @@ button {
 
   .nav-actions {
     margin-left: auto;
+    order: 1;
   }
 
-  .nav-shop {
-    display: none;
+  .nav-search {
+    padding: 10px 12px;
+    gap: 5px;
   }
 
   .hero {
@@ -1036,7 +1062,7 @@ button {
 @media (max-width: 700px) {
   .menu-toggle {
     display: block;
-    margin-left: auto;
+    order: 2;
   }
 
   .navbar {
@@ -1055,10 +1081,6 @@ button {
 
   .nav-links.nav-open {
     display: flex;
-  }
-
-  .nav-actions {
-    display: none;
   }
 
   .inner-grid {

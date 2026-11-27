@@ -1,69 +1,78 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { petCategories } from "./pet-categories";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import BrandMark from "./components/BrandMark";
+import HomeDiscovery from "./components/HomeDiscovery";
+import { products } from "./products/catalog";
+import "./categories/gallery.css";
+import "./home.css";
 
-const products = [
+const featuredFoodPrices = new Map([
+  ["Me-O Dry Cat Food", 22000],
+  ["Royal Canin Indoor Adult", 39000],
+  ["Whiskas Dry Food", 24000],
+  ["Pedigree", 25000],
+  ["Purina Pro Plan", 35000],
+  ["Royal Canin Puppy", 40000],
+]);
+
+const petFoods: {
+  name: string;
+  category: string;
+  image: string;
+  price: number;
+  tag?: string;
+  rating?: string;
+}[] = [
   {
-    id: 1,
     name: "Premium Cat Food",
     category: "Kucing",
-    price: 85000,
+    price: 28000,
     image:
       "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=700",
     tag: "Best Seller",
     rating: "4.9",
   },
   {
-    id: 2,
     name: "Dog Food Premium",
     category: "Anjing",
-    price: 120000,
+    price: 32000,
     image:
       "https://images.unsplash.com/photo-1582798358481-d199fb7347bb?w=700",
     tag: "Popular",
     rating: "4.8",
   },
-  {
-    id: 3,
-    name: "Pet Toy Collection",
-    category: "Mainan",
-    price: 45000,
-    image:
-      "https://images.unsplash.com/photo-1545249390-6bdfa286032f?w=700",
-    tag: "New Arrival",
-    rating: "4.9",
-  },
-  {
-    id: 4,
-    name: "Pet Care Shampoo",
-    category: "Perawatan",
-    price: 55000,
-    image:
-      "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=700",
-    tag: "Recommended",
-    rating: "4.7",
-  },
+  ...products.flatMap((product) => {
+    const price = featuredFoodPrices.get(product.name);
+    return price !== undefined && product.category.startsWith("Makanan ")
+      ? [{ ...product, price }]
+      : [];
+  }),
 ];
 
-// DATA 22 KATEGORI HEWAN
 export default function Home() {
-  const [category, setCategory] = useState("Semua");
   const [search, setSearch] = useState("");
-  const [cart, setCart] = useState(0);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const cartDialog = useRef<HTMLDialogElement>(null);
+  const cartItems = petFoods
+    .map((product) => ({ ...product, quantity: quantities[product.image] ?? 0 }))
+    .filter(({ quantity }) => quantity > 0);
+  const cartCount = cartItems.reduce((sum, { quantity }) => sum + quantity, 0);
+  const cartTotal = cartItems.reduce((sum, { price, quantity }) => sum + price * quantity, 0);
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const matchCategory =
-        category === "Semua" || product.category === category;
+  function changeQuantity(image: string, amount: number) {
+    setQuantities((current) => ({
+      ...current,
+      [image]: Math.max(0, (current[image] ?? 0) + amount),
+    }));
+  }
 
-      const matchSearch = product.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
-
-      return matchCategory && matchSearch;
-    });
-  }, [category, search]);
+  const query = search.trim().toLowerCase();
+  const filteredFoods = petFoods.filter(({ name, category }) =>
+    `${name} ${category}`.toLowerCase().includes(query),
+  );
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("id-ID", {
@@ -72,184 +81,63 @@ export default function Home() {
       maximumFractionDigits: 0,
     }).format(price);
 
+  const orderMessage = [
+    "Halo PetHaven, saya ingin memesan:",
+    "",
+    ...cartItems.map(({ name, price, quantity }) =>
+      `• ${name} × ${quantity} — ${formatPrice(price * quantity)}`,
+    ),
+    "",
+    `Total: ${formatPrice(cartTotal)}`,
+  ].join("\n");
+
   return (
-    <main>
-      {/* HERO */}
-      <section className="hero" id="home">
-        <div className="hero-content">
-          <span className="eyebrow">
-            <span>🐾</span> WELCOME TO PET HAVEN
-          </span>
-
-          <h1>
-            Give Your Pets
-            <span> The Love They Deserve.</span>
-          </h1>
-
-          <p>
-            Temukan makanan, mainan, dan perlengkapan pilihan
-            untuk menjaga sahabat berbulu tetap sehat, aktif,
-            dan bahagia setiap hari.
-          </p>
-
-          <div className="hero-buttons">
-            <a href="#products" className="primary-button">
-              Explore Products <span>→</span>
-            </a>
-
-            <a href="#about" className="secondary-button">
-              Discover More
-            </a>
-          </div>
-
-          <div className="hero-stats">
-            <div>
-              <strong>100+</strong>
-              <span>Pet Products</span>
-            </div>
-
-            <div>
-              <strong>Happy Pets</strong>
-              <span>Our Main Priority</span>
-            </div>
-
-            <div>
-              <strong>100%</strong>
-              <span>Love & Care</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero-image">
-          <img
-            src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=1100"
-            alt="Anjing dan hewan peliharaan"
-          />
-
-          <div className="floating-card">
-            <span className="floating-icon">💚</span>
-            <div>
-              <strong>Made with Love</strong>
-              <small>For your lovely pets</small>
-            </div>
-          </div>
-
-          <div className="hero-decoration">✦</div>
-        </div>
-      </section>
-
-      {/* BENEFITS */}
-      <section className="benefits">
-        <div className="benefit-item">
-          <span className="benefit-icon">🚚</span>
-          <div>
-            <strong>Fast Delivery</strong>
-            <small>Pengiriman cepat</small>
-          </div>
-        </div>
-
-        <div className="benefit-item">
-          <span className="benefit-icon">⭐</span>
-          <div>
-            <strong>Quality Products</strong>
-            <small>Produk berkualitas</small>
-          </div>
-        </div>
-
-        <div className="benefit-item">
-          <span className="benefit-icon">💚</span>
-          <div>
-            <strong>Pet Friendly</strong>
-            <small>Peduli hewan kesayangan</small>
-          </div>
-        </div>
-
-        <div className="benefit-item">
-          <span className="benefit-icon">🔒</span>
-          <div>
-            <strong>Safe Shopping</strong>
-            <small>Belanja lebih nyaman</small>
-          </div>
-        </div>
-      </section>
-
-      {/* CATEGORIES */}
-      <section className="section categories-section" id="categories">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">
-              DISCOVER YOUR LOVELY PETS
-            </span>
-
-            <h2>Explore Our Categories</h2>
-
-            <p>
-              Temukan berbagai jenis hewan peliharaan
-              yang bisa menjadi sahabat terbaikmu.
-            </p>
-          </div>
-        </div>
-
-        <div className="pet-category-grid">
-          {petCategories.map((item) => (
-            <article
-              className="pet-category-card"
-              key={item.name}
-            >
-              <div className="pet-category-image">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  loading="lazy"
-                />
-              </div>
-
-              <div className="pet-category-info">
-                <h3>{item.name}</h3>
-                <span>Explore Pet →</span>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+    <main className="home-page">
+      <HomeDiscovery />
 
       {/* PRODUCTS */}
       <section className="section products-section" id="products">
         <div className="section-heading product-heading">
           <div>
-            <span className="eyebrow">
-              OUR FAVORITE COLLECTION
-            </span>
-
-            <h2>Products for Happy Pets</h2>
+            <h2>Makanan Hewan Pilihan</h2>
 
             <p>
-              Produk pilihan untuk sahabat berbulu kesayanganmu.
+              Pilihan makanan untuk kucing dan anjing kesayanganmu.
             </p>
 
-            <p className="cart-summary">
-              🛒 Keranjang: {cart} produk
-            </p>
+            <button
+              type="button"
+              className="home-cart-trigger"
+              aria-haspopup="dialog"
+              onClick={() => cartDialog.current?.showModal()}
+            >
+              🛒 Keranjang <span aria-live="polite">({cartCount} produk)</span>
+            </button>
           </div>
 
           <input
             type="search"
-            placeholder="Cari produk..."
+            placeholder="Cari makanan hewan..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="search-input"
-            aria-label="Cari produk"
+            aria-label="Cari makanan hewan"
           />
         </div>
 
         <div className="product-grid">
-          {filteredProducts.map((product) => (
-            <article className="product-card" key={product.id}>
+          {filteredFoods.map((product) => (
+            <article className="product-card" key={product.image}>
               <div className="product-image">
-                <img src={product.image} alt={product.name} />
-                <span className="product-tag">
-                  {product.tag}
-                </span>
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  width={700}
+                  height={470}
+                  unoptimized
+                  style={product.image.startsWith("/") ? { objectFit: "contain" } : undefined}
+                />
+                {product.tag && <span className="product-tag">{product.tag}</span>}
               </div>
 
               <div className="product-info">
@@ -258,9 +146,7 @@ export default function Home() {
                     {product.category}
                   </span>
 
-                  <span className="product-rating">
-                    ★ {product.rating}
-                  </span>
+                  {product.rating && <span className="product-rating">★ {product.rating}</span>}
                 </div>
 
                 <h3>{product.name}</h3>
@@ -271,9 +157,7 @@ export default function Home() {
                   <button
                     className="add-button"
                     aria-label={`Tambah ${product.name} ke keranjang`}
-                    onClick={() =>
-                      setCart((current) => current + 1)
-                    }
+                    onClick={() => changeQuantity(product.image, 1)}
                   >
                     +
                   </button>
@@ -283,25 +167,68 @@ export default function Home() {
           ))}
         </div>
 
-        {filteredProducts.length === 0 && (
+        {filteredFoods.length === 0 && (
           <div className="empty-message">
             <span>🐾</span>
-            <h3>Produk tidak ditemukan</h3>
+            <h3>Makanan tidak ditemukan</h3>
             <p>
-              Coba gunakan kata kunci atau kategori lainnya.
+              Coba cari dengan nama makanan atau jenis hewan.
             </p>
 
             <button
               className="secondary-button"
-              onClick={() => {
-                setSearch("");
-                setCategory("Semua");
-              }}
+              onClick={() => setSearch("")}
             >
-              Tampilkan Semua Produk
+              Tampilkan Semua Makanan
             </button>
           </div>
         )}
+        <dialog className="home-cart-dialog" ref={cartDialog} aria-labelledby="home-cart-title">
+          <div className="home-cart-header">
+            <div>
+              <h2 id="home-cart-title">Keranjang Belanja</h2>
+              <p>{cartCount} produk</p>
+            </div>
+            <form method="dialog">
+              <button type="submit" aria-label="Tutup keranjang">×</button>
+            </form>
+          </div>
+          {cartItems.length === 0 ? <p className="home-cart-empty">Keranjangmu masih kosong.</p> : (
+            <ul className="home-cart-items">
+              {cartItems.map(({ image, name, price, quantity }) => (
+                <li key={image}>
+                  <div className="home-cart-product">
+                    <Image src={image} alt="" width={72} height={72} unoptimized />
+                    <div><strong>{name}</strong><p>{formatPrice(price)} per produk</p></div>
+                  </div>
+                  <div className="home-cart-item-actions">
+                    <strong>{formatPrice(price * quantity)}</strong>
+                    <div className="home-cart-quantity">
+                      <button type="button" aria-label={`Kurangi ${name}`} onClick={() => changeQuantity(image, -1)}>−</button>
+                      <span>{quantity}</span>
+                      <button type="button" aria-label={`Tambah ${name}`} onClick={() => changeQuantity(image, 1)}>+</button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="home-cart-footer">
+            <p className="home-cart-total"><strong>Total belanja</strong><strong aria-live="polite">{formatPrice(cartTotal)}</strong></p>
+            {cartCount > 0 ? (
+              <a
+                className="home-cart-continue"
+                href={`https://wa.me/6281234567890?text=${encodeURIComponent(orderMessage)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Lanjut ke WhatsApp
+              </a>
+            ) : (
+              <button className="home-cart-continue" type="button" disabled>Lanjut ke WhatsApp</button>
+            )}
+          </div>
+        </dialog>
       </section>
 
       {/* PROMO BANNER */}
@@ -329,43 +256,47 @@ export default function Home() {
       {/* ABOUT */}
       <section className="about-section" id="about">
         <div className="about-image">
-          <img
-            src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1000"
-            alt="Anjing bermain bersama"
+          <Image
+            src="/images/pethaven-about-friends.webp"
+            alt="Anak anjing dan anak kucing berpelukan di bawah selimut krem"
+            width={1000}
+            height={588}
+            unoptimized
           />
         </div>
 
         <div className="about-content">
-          <span className="eyebrow">A LITTLE ABOUT US</span>
+          <span className="eyebrow">TENTANG PETHAVEN</span>
 
-          <h2>More Than Products, It's About Love.</h2>
+          <h2>Untuk sahabat kecil yang selalu menyambutmu pulang.</h2>
 
           <p>
-            PetHaven hadir sebagai tempat untuk menemukan
-            berbagai kebutuhan hewan peliharaan. Kami percaya
-            setiap hewan berhak mendapatkan perawatan,
-            perhatian, dan kasih sayang terbaik.
+            Ekor yang bergoyang saat kamu membuka pintu. Dengkur kecil
+            di sampingmu setelah hari yang panjang. Momen sederhana itu
+            yang membuat mereka jadi bagian dari keluarga. Di PetHaven,
+            temukan kebutuhan sehari-hari untuk membalas kasih sayang
+            mereka dengan caramu sendiri.
           </p>
 
           <div className="about-points">
-            <span>✓ Produk pilihan untuk hewan kesayangan</span>
-            <span>✓ Mengutamakan kenyamanan dan kualitas</span>
-            <span>✓ Dibuat dengan kepedulian terhadap hewan</span>
+            <span>✓ Makanan pilihan untuk setiap hari</span>
+            <span>✓ Mainan untuk waktu seru bersama</span>
+            <span>✓ Perlengkapan untuk merawat mereka di rumah</span>
           </div>
 
-          <a href="#contact" className="primary-button">
-            Get to Know Us →
-          </a>
+          <Link href="/about" className="primary-button">
+            Kenali PetHaven →
+          </Link>
         </div>
       </section>
 
       {/* CONTACT */}
       <section className="contact-section" id="contact">
         <span className="eyebrow">
-          LET'S TALK ABOUT YOUR PET
+          LET&apos;S TALK ABOUT YOUR PET
         </span>
 
-        <h2>We're Here for You and Your Pets.</h2>
+        <h2>We&apos;re Here for You and Your Pets.</h2>
 
         <p>
           Punya pertanyaan mengenai produk kami?
@@ -381,12 +312,12 @@ export default function Home() {
       <footer className="footer">
         <div className="footer-main">
           <a href="#home" className="logo">
-            <span className="logo-icon">🐾</span>
+            <BrandMark />
             Pet<span>Haven</span>
           </a>
 
           <p>
-            Making every pet's life happier, healthier, and full of love.
+            Making every pet&apos;s life happier, healthier, and full of love.
           </p>
         </div>
 

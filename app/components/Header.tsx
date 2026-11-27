@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import BrandMark from "./BrandMark";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -23,7 +24,7 @@ export default function Header() {
         className="logo"
         onClick={() => setMenuOpen(false)}
       >
-        <span className="logo-icon">🐾</span>
+        <BrandMark />
         Pet<span>Haven</span>
       </Link>
 
@@ -51,11 +52,15 @@ export default function Header() {
 
       <div className="nav-actions">
         <Link
-          href="/products"
-          className="nav-shop"
+          href="/products#cari-produk"
+          className="nav-search"
           onClick={() => setMenuOpen(false)}
         >
-          Shop Now →
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="4.75" />
+            <path d="m12 12 4 4" />
+          </svg>
+          Cari Produk
         </Link>
       </div>
     </header>
