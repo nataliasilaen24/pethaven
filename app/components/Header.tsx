@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import BrandMark from "./BrandMark";
+import ProductsCart from "../products/ProductsCart";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -16,9 +17,12 @@ const navItems = [
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const showCart = pathname === "/products" || pathname === "/products/cart";
+  const isHome = pathname === "/";
+  const headerStyle = isHome ? " home-navbar" : showCart ? " products-navbar" : pathname === "/categories" ? " categories-navbar" : "";
 
   return (
-    <header className="navbar">
+    <header className={`navbar${headerStyle}`}>
       <Link
         href="/"
         className="logo"
@@ -38,20 +42,25 @@ export default function Header() {
       </button>
 
       <nav className={`nav-links ${menuOpen ? "nav-open" : ""}`}>
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={pathname === item.href ? "active" : ""}
-            onClick={() => setMenuOpen(false)}
-          >
-            {item.name}
-          </Link>
-        ))}
+        {navItems.map((item) => {
+          const isCurrentPage = pathname === item.href;
+          const isCurrentSection = item.href !== "/" && pathname.startsWith(`${item.href}/`);
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={isCurrentPage ? "page" : isCurrentSection ? "location" : undefined}
+              onClick={() => setMenuOpen(false)}
+            >
+              {item.name}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="nav-actions">
-        <Link
+        {showCart || isHome ? <ProductsCart onNavigate={() => setMenuOpen(false)} /> : <Link
           href="/products#cari-produk"
           className="nav-search"
           onClick={() => setMenuOpen(false)}
@@ -61,7 +70,7 @@ export default function Header() {
             <path d="m12 12 4 4" />
           </svg>
           Cari Produk
-        </Link>
+        </Link>}
       </div>
     </header>
   );

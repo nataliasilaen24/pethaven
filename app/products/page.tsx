@@ -1,102 +1,98 @@
-"use client";
+﻿"use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-
 import Image from "next/image";
-import { productGroups, products } from "./catalog";
+import { catalogProducts, type CatalogProduct } from "./catalog";
+import ProductIcon from "./ProductIcon";
+import ProductGrid from "./ProductGrid";
 import "./products.css";
+
+const filters = [
+  { category: "Semua", label: "Semua Produk", icon: "🐾" },
+  { category: "Makanan Kucing", label: "Makanan Kucing", icon: "🐱" },
+  { category: "Makanan Anjing", label: "Makanan Anjing", icon: "🐶" },
+  { category: "Mainan Anjing", label: "Mainan", icon: "🎾" },
+  { category: "Perawatan", label: "Perawatan", icon: "🧴" },
+  { category: "Pasir kucing yang bagus", label: "Pasir Kucing", icon: "🧺" },
+  { category: "Hewan Lainnya", label: "Hewan Lainnya", icon: "🐾" },
+];
+
+const categoryLabels = new Map(filters.map(({ category, label }) => [category, label]));
+const byName = new Intl.Collator("id", { numeric: true });
+
+const sortProducts: Record<string, (first: CatalogProduct, second: CatalogProduct) => number> = {
+  featured: (first, second) => (first.featuredOrder - second.featuredOrder) || byName.compare(first.name, second.name),
+  name: (first, second) => byName.compare(first.name, second.name),
+  price: (first, second) => (first.price ?? Infinity) - (second.price ?? Infinity) || byName.compare(first.name, second.name),
+};
 
 export default function ProductsPage() {
   return (
-    <Suspense>
-      <ProductCatalog />
-    </Suspense>
+    <main className="products-page">
+      <section className="products-hero">
+        <div className="products-hero-photo">
+          <Image src="/images/pethaven-contact-hero.webp" alt="" fill sizes="(max-width: 680px) 100vw, 52vw" preload />
+        </div>
+        <div className="products-wrap products-hero-copy">
+          <span className="products-eyebrow"><span aria-hidden="true">🐾</span> OUR PRODUCTS</span>
+          <h1>Products for Happy Pets <span aria-hidden="true">♡</span></h1>
+          <p>Produk pilihan untuk sahabat berbulu kesayanganmu.</p>
+          <a className="products-shop" href="#cari-produk">Shop with Love</a>
+        </div>
+        <span className="products-paw products-paw-hero" aria-hidden="true">🐾</span>
+      </section>
+      <Suspense>
+        <ProductCatalog />
+      </Suspense>
+    </main>
   );
 }
 
 function ProductCatalog() {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || "Semua";
+  const requestedCategory = searchParams.get("category") ?? "Semua";
+  return <CatalogControls key={requestedCategory} initialCategory={categoryLabels.has(requestedCategory) ? requestedCategory : "Semua"} />;
+}
+
+function CatalogControls({ initialCategory }: { initialCategory: string }) {
   const [category, setCategory] = useState(initialCategory);
   const [search, setSearch] = useState("");
-
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const matchCategory =
-        category === "Semua" || product.category === category;
-      const matchSearch = product.name
-        .toLowerCase()
-        .includes(search.trim().toLowerCase());
-
-      return matchCategory && matchSearch;
-    });
-  }, [category, search]);
+  const [sort, setSort] = useState("featured");
+  const query = search.trim().toLowerCase();
+  const matches = catalogProducts.filter((product) =>
+    (category === "Semua" || product.category === category) &&
+    product.name.toLowerCase().includes(query),
+  ).sort(sortProducts[sort]);
 
   return (
-    <main className="inner-page products-page">
-      <section className="page-hero">
-        <span className="eyebrow">OUR COLLECTION</span>
-        <h1>Products for Your Lovely Pets</h1>
-        <p>Temukan produk pilihan untuk sahabat berbulu kesayanganmu.</p>
-      </section>
+    <section className="products-wrap products-catalog" aria-label="Katalog produk">
+      <div className="products-filters" aria-label="Kategori produk">
+        {filters.map((filter) => (
+          <button key={filter.category} type="button" aria-pressed={category === filter.category} onClick={() => setCategory(filter.category)}>
+            <span aria-hidden="true">{filter.icon}</span> {filter.label}
+          </button>
+        ))}
+      </div>
 
-      <section className="catalog-section">
-        <div className="catalog-controls">
-          <input
-            id="cari-produk"
-            type="search"
-            aria-label="Cari nama produk"
-            className="search-input"
-            placeholder="Cari nama produk..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      <div className="products-controls">
+        <label className="products-search">
+          <ProductIcon name="search" />
+          <input id="cari-produk" type="search" aria-label="Cari nama produk" placeholder="Cari produk..." value={search} onChange={(event) => setSearch(event.target.value)} />
+        </label>
+        <select aria-label="Urutkan produk" value={sort} onChange={(event) => setSort(event.target.value)}>
+          <option value="featured">Urutkan: Rekomendasi</option>
+          <option value="name">Nama A–Z</option>
+          <option value="price">Harga terendah</option>
+        </select>
+      </div>
 
-          <select
-            className="category-select"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="Semua">Semua Kategori</option>
-            {productGroups.map(({ category }) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {productGroups.map((group) => {
-          const groupProducts = filteredProducts.filter(
-            (product) => product.category === group.category,
-          );
-
-          if (groupProducts.length === 0) return null;
-
-          return (
-            <section className="catalog-group" key={group.category}>
-              <h2>{group.category}</h2>
-              <div className="product-grid">
-                {groupProducts.map((product) => (
-                  <article className="product-card" key={product.image}>
-                    <div className="product-image">
-                      <Image src={product.image} alt="" width={400} height={205} unoptimized />
-                    </div>
-                    <div className="product-info">
-                      <h3>{product.name}</h3>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          );
-        })}
-
-        {filteredProducts.length === 0 && (
-          <p className="empty-message">Produk tidak ditemukan.</p>
-        )}
-      </section>
-    </main>
+      {matches.length === 0 ? (
+        <p className="products-empty" role="status">{query ? "Produk tidak ditemukan." : "Belum ada produk dalam kategori ini."}</p>
+      ) : (
+        <ProductGrid items={matches} />
+      )}
+      <span className="products-paw products-paw-catalog" aria-hidden="true">🐾</span>
+    </section>
   );
 }

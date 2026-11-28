@@ -63,3 +63,48 @@ export const products = productGroups.flatMap(({ category, files }) =>
     image: `/images/products/${encodeURIComponent(category)}/${encodeURIComponent(file)}`,
   })),
 );
+
+export const productPrices = new Map([
+  ["Me-O Dry Cat Food", 22000],
+  ["Royal Canin Indoor Adult", 39000],
+  ["Whiskas Dry Food", 24000],
+  ["Pedigree", 25000],
+  ["Purina Pro Plan", 35000],
+  ["Royal Canin Puppy", 40000],
+]);
+
+const shampoo = {
+  name: "Pet Care Shampoo",
+  category: "Perawatan",
+  image: "/images/products/pet-care-shampoo.webp",
+};
+
+const highlights = new Map([
+  ["Royal Canin Indoor Adult", { order: 0, label: "Pilihan Kucing" }],
+  ["Pedigree", { order: 1, label: "Pilihan Anjing" }],
+  ["Bola Karet", { order: 2, label: "Mainan Pilihan" }],
+  [shampoo.name, { order: 3, label: "Contoh Perawatan" }],
+]);
+
+export const catalogProducts = [...products, shampoo].map((product) => ({
+  ...product,
+  price: productPrices.get(product.name),
+  badge: highlights.get(product.name)?.label,
+  featuredOrder: highlights.get(product.name)?.order ?? Infinity,
+}));
+
+export function formatCatalogPrice(price: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(price);
+}
+
+export type CatalogProduct = (typeof catalogProducts)[number];
+
+export function catalogCategoryLabel(category: string) {
+  if (category === "Mainan Anjing") return "Mainan";
+  if (category === "Pasir kucing yang bagus") return "Pasir Kucing";
+  return category;
+}

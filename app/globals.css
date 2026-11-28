@@ -85,15 +85,21 @@ button {
 }
 
 .nav-links a {
+  padding: 8px 11px;
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
-  color: #68766c;
-  transition: 0.2s;
+  color: #23442f;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--green);
+.nav-links a:hover {
+  background: var(--green-light);
+}
+
+.nav-links a[aria-current] {
+  background: #2d5838;
+  color: white;
 }
 
 .nav-actions {
