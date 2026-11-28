@@ -6,6 +6,7 @@ import Image from "next/image";
 import { catalogProducts, type CatalogProduct } from "./catalog";
 import ProductIcon from "./ProductIcon";
 import ProductGrid from "./ProductGrid";
+import ProductCareGuides from "./ProductCareGuides";
 import "./products.css";
 
 const filters = [
@@ -92,6 +93,7 @@ function CatalogControls({ initialCategory }: { initialCategory: string }) {
       ) : (
         <ProductGrid items={matches} />
       )}
+      {category === "Perawatan" && <ProductCareGuides />}
       <span className="products-paw products-paw-catalog" aria-hidden="true">🐾</span>
     </section>
   );

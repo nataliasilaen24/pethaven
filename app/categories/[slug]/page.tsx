@@ -2,11 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BrandMark from "../../components/BrandMark";
+import ContactIcon from "../../contact/ContactIcon";
+import ProductIcon from "../../products/ProductIcon";
 import { petCategories } from "../../pet-categories";
 import { petContactUrl, petSlug } from "../pet-links";
 import PetFavoriteButton from "../PetFavoriteButton";
 import PetGallery from "../PetGallery";
 import PetShareButton from "../PetShareButton";
+import PetDetailSections from "./PetDetailSections";
 import "../gallery.css";
 import "./pet-detail.css";
 
@@ -27,36 +30,48 @@ export default async function PetDetailPage({ params }: { params: Promise<{ slug
   return (
     <main className="pet-detail-page">
       <div className="pet-detail-container">
-        <Link className="pet-detail-back" href="/categories">← Semua Hewan</Link>
+        <nav className="pet-detail-breadcrumb" aria-label="Lokasi halaman">
+          <Link className="pet-detail-back" href="/categories">← Semua Hewan</Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{pet.name}</span>
+        </nav>
         <section className="pet-detail-layout" aria-labelledby="pet-name">
           <div className="pet-detail-media">
             <div className="pet-detail-photo">
-              <Image src={pet.image} alt={pet.name} fill sizes="(max-width: 720px) 92vw, (max-width: 1400px) 50vw, 660px" preload />
+              <Image src={pet.image} alt={pet.name} fill sizes="(max-width: 820px) 92vw, (max-width: 1540px) 43vw, 665px" preload />
+              <PetFavoriteButton name={pet.name} iconOnly />
+              <a className="pet-detail-photo-link" href={pet.image} target="_blank" rel="noreferrer" aria-label={`Buka foto asli ${pet.name} di tab baru`}>
+                Lihat foto asli <span aria-hidden="true">↗</span>
+              </a>
             </div>
-            <a className="pet-detail-thumbnail" href={pet.image} target="_blank" rel="noreferrer" aria-label={`Buka foto asli ${pet.name}`}>
-              <Image src={pet.image} alt="" width={92} height={72} />
-            </a>
           </div>
           <div className="pet-detail-info">
-            <h1 id="pet-name">{pet.name}</h1>
+            <div className="pet-detail-brand"><ContactIcon name="paw" /> PetHaven</div>
+            <h1 id="pet-name">{pet.name} <ContactIcon name="paw" /></h1>
             <p className="pet-detail-price">Tanyakan harga</p>
             <p className="pet-detail-description">Hubungi PetHaven untuk menanyakan lokasi, usia, dan informasi perawatan {pet.name}.</p>
             <div className="pet-detail-actions">
-              <a className="primary-button" href={petContactUrl(pet.name)} target="_blank" rel="noreferrer">Hubungi WhatsApp</a>
+              <a className="primary-button" href={petContactUrl(pet.name)} target="_blank" rel="noreferrer"><ContactIcon name="whatsapp" /> Hubungi WhatsApp</a>
               <PetFavoriteButton name={pet.name} />
             </div>
             <dl className="pet-detail-facts">
-              <div><dt>Ketersediaan</dt><dd>Konfirmasi via WhatsApp</dd></div>
-              <div><dt>Lokasi</dt><dd>Belum dicantumkan</dd></div>
-              <div><dt>Katalog</dt><dd><Link href="/categories">PetHaven</Link></dd></div>
-              <div><dt>Bagikan</dt><dd><PetShareButton /></dd></div>
+              <div><dt><ProductIcon name="check" /> Ketersediaan</dt><dd>Konfirmasi via WhatsApp</dd></div>
+              <div><dt><ContactIcon name="pin" /> Lokasi</dt><dd>Belum dicantumkan</dd></div>
+              <div><dt><ContactIcon name="paw" /> Katalog</dt><dd><Link href="/categories">PetHaven</Link></dd></div>
             </dl>
+            <div className="pet-detail-sharing"><strong>Bagikan</strong><PetShareButton /></div>
+            <div className="pet-detail-support">
+              <Link href="/about"><ProductIcon name="shield" /> Tentang PetHaven</Link>
+              <a href={petContactUrl(pet.name)} target="_blank" rel="noreferrer"><ContactIcon name="paw" /> Konsultasi Perawatan</a>
+              <Link href="/contact"><ProductIcon name="headset" /> Hubungi Kami</Link>
+            </div>
           </div>
         </section>
+        <PetDetailSections key={pet.name} pet={pet} />
       </div>
       <section className="pet-detail-related" aria-labelledby="pet-related-title">
         <h2 id="pet-related-title">Pilihan Hewan Lainnya</h2>
-        <PetGallery pets={suggestions} showFavorites={false} />
+        <PetGallery pets={suggestions} showFavorites={false} categoryCards />
       </section>
       <footer className="pet-detail-footer">
         <div>
